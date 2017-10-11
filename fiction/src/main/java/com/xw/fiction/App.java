@@ -80,16 +80,16 @@ public class App {
 
 	/**
 	 * 向文件写入内容
-	 * @param s
+	 * @param str
 	 */
-	private static void writeToFile(String s) {
+	private static void writeToFile(String str) {
 		File file = new File(title);
 		FileWriter fw = null;
 		BufferedWriter writer = null;
 		try {
 			fw = new FileWriter(file,true);
 			writer = new BufferedWriter(fw);
-			writer.write(s);
+			writer.write(str);
 			writer.newLine();//换行
 			writer.flush();
 		} catch (FileNotFoundException e) {
