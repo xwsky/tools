@@ -1,4 +1,4 @@
-package free;
+package com.free.util;
 
 import org.junit.Assert;
 import org.junit.Before;

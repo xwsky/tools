@@ -1,4 +1,4 @@
-package free;
+package com.free.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

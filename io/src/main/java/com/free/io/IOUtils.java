@@ -1,4 +1,4 @@
-package com.xw.io;
+package com.free.io;
 
 public class IOUtils {
 
