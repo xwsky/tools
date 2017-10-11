@@ -1,4 +1,4 @@
-package com.xw;
+package com.xw.fiction;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,34 +12,31 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class App {
-	
-	/**
-	 * 文件名
-	 */
-	private static String title = "武炼巅峰.txt";
-	
-	/**
-	 * 每章节地址前缀
-	 */
+	/***********************************配置项开始*****************************************/
+
+	//文件名
+	private static String title = "小说/大宇宙时代.txt";
+
+	//每章节地址前缀
 	static String baseUrl = "http://www.xxbiquge.com";
-	/**
-	 * 菜单栏地址
-	 */
-	static String menus = "http://www.xxbiquge.com/0_347/";
-	
+	//本小说前缀
+	static String menus = "/3_3379/";
+
+	/**********************************配置项结束******************************************/
+
 	public static void main(String[] args) throws InterruptedException {
 		try {
+			long stime = System.currentTimeMillis();
 			//清空文件内容
 			clearInfoForFile();
-			String url = menus;
+			String url = baseUrl + menus;
 			Document doc = Jsoup.connect(url).get();
 			System.out.println("获取列表");
 			Elements links = Jsoup.parse(doc.html()).select("a");
 			String content;
 			for (Element a : links) {
-				Thread.sleep(200);
 				url = a.attr("href");
-				if (url!=null && url.contains("/0_347")) {
+				if (url!=null && url.contains(menus) && url.contains(".html")) {
 					//写入标题
 					System.out.println("写入章节："+a.text());
 					writeToFile(a.text());
@@ -48,12 +45,15 @@ public class App {
 					writeToFile(content);
 				}
 			}
+			long etime = System.currentTimeMillis();
+			double useTime = (stime-etime)/1000/60;
+			System.out.println("用时："+useTime+" 分钟");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	/**
 	 * 获取网页内容
 	 * @param pageUrl
@@ -84,43 +84,46 @@ public class App {
 	 */
 	private static void writeToFile(String s) {
 		File file = new File(title);
-        FileWriter fw = null;
-        BufferedWriter writer = null;
-        try {
-            fw = new FileWriter(file,true);
-            writer = new BufferedWriter(fw);
-        	writer.write(s);
-        	writer.newLine();//换行
-            writer.flush();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }catch (IOException e) {
-            e.printStackTrace();
-        }finally{
-            try {
-                writer.close();
-                fw.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+		FileWriter fw = null;
+		BufferedWriter writer = null;
+		try {
+			fw = new FileWriter(file,true);
+			writer = new BufferedWriter(fw);
+			writer.write(s);
+			writer.newLine();//换行
+			writer.flush();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				writer.close();
+				fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	/**
 	 * 创建并清空文件
 	 */
 	public static void clearInfoForFile() {
-        File file =new File(title);
-        try {
-            if(!file.exists()) {
-                file.createNewFile();
-            }
-            FileWriter fileWriter =new FileWriter(file);
-            fileWriter.write("");
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+		File file =new File(title);
+		try {
+			if(!file.getParentFile().exists()){
+				file.getParentFile().mkdirs();
+			}
+			if(!file.exists()) {
+				file.createNewFile();
+			}
+			FileWriter fileWriter =new FileWriter(file);
+			fileWriter.write("");
+			fileWriter.flush();
+			fileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
