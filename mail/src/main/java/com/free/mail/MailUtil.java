@@ -30,7 +30,7 @@ public class MailUtil {
         // 发件人的账号  
         props.put("mail.user", "7394728161111@qq.com");
         // 访问SMTP服务时需要提供的密码  
-        props.put("mail.password", "xpxipcqxulujbegg");  
+        props.put("mail.password", "");
         props.setProperty("mail.debug", "true");
         props.put("mail.smtp.port","465");
         props.put("mail.smtp.ssl.enable","true");
