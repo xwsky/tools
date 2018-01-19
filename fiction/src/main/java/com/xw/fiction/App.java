@@ -18,9 +18,7 @@ public class App {
 	private static String title = "小说/大宇宙时代.txt";
 
 	//每章节地址前缀
-	static String baseUrl = "http://www.xxbiquge.com";
-	//本小说前缀
-	static String menus = "/3_3379/";
+	static String url = "https://www.xxbiquge.com/2_2397/";
 
 	/**********************************配置项结束******************************************/
 
@@ -29,19 +27,18 @@ public class App {
 			long stime = System.currentTimeMillis();
 			//清空文件内容
 			clearInfoForFile();
-			String url = baseUrl + menus;
 			Document doc = Jsoup.connect(url).get();
 			System.out.println("获取列表");
-			Elements links = Jsoup.parse(doc.html()).select("a");
+			Elements links = doc.select("a");
+			String href = null;
 			String content;
-			for (Element a : links) {
-				url = a.attr("href");
-				if (url!=null && url.contains(menus) && url.contains(".html")) {
-					//写入标题
+			for (Element a:links) {
+				href = a.attr("abs:href");
+				if(href.endsWith("html")&&href.contains("/2_2397/")){
 					System.out.println("写入章节："+a.text());
 					writeToFile(a.text());
 					//写入内容
-					content = getContent(url);
+					content = getContent(href);
 					writeToFile(content);
 				}
 			}
@@ -56,21 +53,21 @@ public class App {
 
 	/**
 	 * 获取网页内容
-	 * @param pageUrl
+	 * @param url
 	 * @return
 	 */
-	private static String getContent(String pageUrl) {
+	private static String getContent(String url) {
 		Document doc=null;
 		Element content=null;
 		try {
-			doc = Jsoup.connect(baseUrl+pageUrl).get();
+			doc = Jsoup.connect(url).get();
 			content = doc.getElementById("content");
 			content.html();
 		} catch (Exception e) {
 			try {
 				Thread.sleep(1000);
-				System.out.println("尝试重新下载章节："+pageUrl);
-				return getContent(pageUrl);
+				System.out.println("尝试重新下载章节："+url);
+				return getContent(url);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
